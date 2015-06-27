@@ -24,6 +24,8 @@ Download {{ pkg_name }}:
     - recurse:
       - user
       - group
+
+Build {{ pkg_name }}:
   cmd.wait:
     - cwd: /usr/src/npm/package
     - user: {{ npm_user }}
@@ -33,4 +35,6 @@ Download {{ pkg_name }}:
       - './configure --prefix={{ npm_prefix }} && node cli.js install marked && make install'
     - unless: test -f {{ npm_bin }}
     - creates: {{ npm_bin }}
+    - wait:
+      - archive: Download {{ pkg_name }}
 

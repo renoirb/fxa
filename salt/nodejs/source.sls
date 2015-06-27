@@ -22,12 +22,17 @@ Download {{ pkg_name }}:
     - source: https://nodejs.org/dist/v{{ version }}/{{ pkg_name }}
     - source_hash: sha1={{ checksum }}
     - archive_format: tar
+    - if_missing: /usr/src/node-v{{ version }}
+
+Build {{ pkg_name }}:
   cmd.wait:
     - cwd: /usr/src/node-v{{ version }}
     - names:
       - ./configure
       - make --jobs={{ make_jobs }}
       - checkinstall --install=yes --pkgname=nodejs --pkgversion "{{ version }}" --default
+    - watch:
+      - archive: Download {{ pkg_name }}
   file.symlink:
     - name: /usr/bin/nodejs
     - target: /usr/local/bin/node

@@ -1,10 +1,10 @@
 SHELL := bash
 
-default: docker-build
+default: base
 
-docker-build:
-		docker build -t fxa/base .
+base:
+		docker build --rm --no-cache=true -t fxa/base .
 
-docker-run:
-		docker run -it --rm fxa/base
+run:
+		docker run -it --rm -v "$(CURDIR)/src":/srv/webapps -v "$(CURDIR)/pkgs":/var/cache/pkgs fxa/base
 

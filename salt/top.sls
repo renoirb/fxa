@@ -1,5 +1,9 @@
 base:
   '*':
-    - salt.masterless
+    - basesystem
     - nodejs
+    - fxa
+  'role: oauth':
+    - match: grain
+    - fxa.oauth
 
