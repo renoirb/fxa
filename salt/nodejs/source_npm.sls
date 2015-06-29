@@ -33,8 +33,6 @@ Build {{ pkg_name }}:
       - npm_config_prefix: {{ npm_prefix }}
     - names:
       - './configure --prefix={{ npm_prefix }} && node cli.js install marked && make install'
-    - unless: test -f {{ npm_bin }}
-    - creates: {{ npm_bin }}
-    - wait:
+    - watch:
       - archive: Download {{ pkg_name }}
 
