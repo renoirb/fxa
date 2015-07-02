@@ -1,8 +1,9 @@
 base:
   '*':
     - basesystem
-    - nodejs
     - fxa
+  'baseimage':
+    - nodejs
   'role: oauth':
     - match: grain
     - fxa.oauth
