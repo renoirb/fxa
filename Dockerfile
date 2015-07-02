@@ -13,13 +13,13 @@ ENV SALT_REPO 'http://ppa.launchpad.net/saltstack/salt/ubuntu trusty'
 #ENV SALT_KEY  http://debian.saltstack.com/debian-salt-team-joehealy.gpg.key
 #ENV SALT_REPO 'http://debian.saltstack.com/debian wheezy-saltstack'
 
-ENV DEBIAN_FRONTEND noninteractive
 ENV ROLE base
 
 COPY salt /srv/salt
 COPY pillar /srv/pillar
 
-RUN    apt-get install -yqq wget \
+RUN    DEBIAN_FRONTEND="noninteractive" \
+    && apt-get install -yqq wget \
     && wget -q -O- ${SALT_KEY} | apt-key add - \
     && printf "deb ${SALT_REPO} main\n" > /etc/apt/sources.list.d/saltstack.list \
     && apt-get update \
@@ -28,6 +28,8 @@ RUN    apt-get install -yqq wget \
     && apt-get -yqq autoremove \
     && printf "failhard: True\nfile_client: local\nstate_verbose: True\nstartup_states: highstate" >> /etc/salt/minion.d/container.conf \
     && salt-call --local state.highstate
+
+COPY scripts /srv/scripts
 
 #
 # Set in place onbuild to handle web app specificities
